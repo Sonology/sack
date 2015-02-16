@@ -1,25 +1,29 @@
 SACKKernel {
 
+
 	*start {
 		var engine, sequencer, controlProcessor;
 
 		Routine {
-			var server, name;
+			var server, name, synths;
 
 			server = Server.default;
 			name = \test;
 
-			SynthDef(name, {|freq=1, amp=0.2|
-				Out.ar(0, SinOsc.ar(LinLin.kr(0.0,1.0,100,1000) * EnvGen.kr(Env.perc, 1, amp,doneAction: 2) ! 2))
-			}).add;
+
+			engine = SACKEngine.new(server);
 
 			server.sync;
 
-			engine = SACKEngine.new;
-			sequencer = SACKSequencer.new(name, engine);
-			controlProcessor = SACKControlProcessor.new;
-			controlProcessor.createStartStop(sequencer);
+			synths = engine.addSynthDefs;
 
+
+
+
+
+			sequencer = SACKSequencer.new(synths, engine);
+			/*controlProcessor = SACKControlprocessor.new;
+			controlProcessor.createStartStop(sequencer);*/
 		}.play;
 	}
 }
