@@ -41,7 +41,7 @@ SACKEngine {
 
 	addSynthDefs { arg libName;
 
-		var lib = libName ? synths.name.asSymbol;
+		var lib = libName ? synths.name;
 		var string, defs;
 
 		string = String.readNew(File(PathName(thisProcess.nowExecutingPath).pathOnly+/+"SackSynthdefs.scd", "r")).split($_); //read in synthdefs as strings
@@ -51,28 +51,47 @@ SACKEngine {
 			def;
 		});
 
-		defs.do( _.add(lib));
+		defs.do( _.add(lib.asSymbol));
 		^this.synths;
 	}
 
 	play { arg event;
-
+		/*need some help with this method--
+		the SACKEngine can create Buses and give access to available buses/buffers with the
+		dictionaries (ie this.buses.busName or this.bufs.bufName) and can also
+		give information about what
+		type of controls/data a synth needs (ie this.synths.at(\synthDefName).controls), but
+		should the mapping of different control sources to running synths be handled by
+		other parts of the program? need to know what sort of argument the play method is
+		supposed to get from SACKSequencer or SACKControl
+		should the argument be a very general specification of which buses/streams go where
+		and then the play method connects them all up before playing the synth?
+		*/
 		event.postln;
 		synth = event.play;
+		^synth
 	}
+
+	/*prepareSynth { arg dict;
+		var controls = this.synths.at(name.asSymbol).controls;
+		var e = ();
+		dict.do()
+
+
+	}*/
 
 	createControlBus { arg name, numChannels = 1;
 		var nm = Bus.control(server, numChannels);
 		var what = name?("bus"++this.buses.size);
 		buses.put(what.asSymbol, nm);
-		^buses;
+		^nm
 	}
 
 	createAudioBus { arg name, numChannels = 1;
 		var nm  = Bus.audio(server, numChannels);
 		var what = name?("bus"++this.buses.size);
 		buses.put(what.asSymbol, nm);
-		^buses;
+		^nm
 
 	}
 
