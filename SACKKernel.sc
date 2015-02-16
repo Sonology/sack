@@ -11,16 +11,19 @@ SACKKernel {
 			name = \test;
 
 
-			engine = SACKEngine.new(this, server);
+			engine = SACKEngine.new(server);
 
 			server.sync;
+
+			synths = engine.addSynthDefs;
+
+
 
 
 
 			sequencer = SACKSequencer.new(synths, engine);
-/*			controlProcessor = SACKControlprocessor.new;
-			controlProcessor.createStartStop(sequencer);
-*/
+			/*controlProcessor = SACKControlprocessor.new;
+			controlProcessor.createStartStop(sequencer);*/
 		}.play;
 	}
 }
