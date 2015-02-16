@@ -20,15 +20,9 @@ SACKSequencer {
 		})
 	}
 
-	createpbind {|synths|
+	createpbind { arg synths = \sine;
 		^Pbind(\instrument, synths,
-			\freq, Pwhite(0, 1, inf),
-			\amp, Pwhite(0, 1, inf),
-			\dur, Pwhite(0, 1, inf),
-			\pan, Pwhite(0, 1, inf),
-			\att, Pwhite(0, 1, inf),
-			\rel, Pwhite(0, 1, inf),
-		);
+			\freq, Pwhite(100, 200, inf), \delta, 1);
 	}
 
 	start {
