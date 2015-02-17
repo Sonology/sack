@@ -21,7 +21,7 @@ SynthDef(\pp, {|outBus=0,amp=0.5,freq=0.5,dur=0.5,att=0.0,rel=0.0,pan=0.5|
 });_
 
 SynthDef(\imp2, {arg freq = 10, filterFreq = 100;
-	Out.ar(0, RHPF.ar(Impulse.ar(freq), filterFreq, 0.1));
+	Out.ar(0, RHPF.ar(Impulse.ar(freq), filterFreq, 0.1)!2);
 });_
 
 
@@ -29,6 +29,10 @@ SynthDef(\writeBus, {arg bus, val;
 	Out.kr(bus, val);
 });_
 
+
+SynthDef(\writeBusLag, {arg bus, val, lag = 0.4;
+	Out.kr(bus, Lag.kr(val, 0.4));
+});_
 
 SynthDef(\imp, {arg freq = 10;
 	Out.ar(0, Impulse.ar(freq));

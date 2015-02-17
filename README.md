@@ -15,12 +15,20 @@ SACKKernel.start
 * Kernel that handles communication between components, initialization and configuration from data files.
 
 
-ADAM: SackSynthdefs.scd should be a file in your current working directory (ie: not in the same folder as the classes)
-and it should contain only SuperCollider SynthDefs followed immediately by an underscore, eg:
+* SackSynthdefs.scd should be a file in your current working directory 
+(ie: not in the same folder as the classes)
+and it should contain only SuperCollider SynthDefs followed 
+immediately by an underscore, eg:
 
-SynthDef(\hello, { arg a = 0, b = 1;
+"SynthDef(\hello, { arg a = 0, b = 1;
 	var sound = SinOsc.ar(a,b);
 	Out.ar(0, sound);
-});_
+});_"
 
-the last SynthDef should have no underscore
+* the last SynthDef should have no underscore
+
+* I've been using the install.sh file to make a symbolic link from my 
+SuperCollider extensions directory to the SACKClasses directory so I 
+can keep all the SACKcode together. 
+If you want to do the same just change SC_EXT_DIR=~/.local/share/SuperCollider/Extensions 
+to wherever you keep your SC extensions
