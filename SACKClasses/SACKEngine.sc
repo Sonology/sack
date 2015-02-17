@@ -21,7 +21,7 @@ SACKEngine {
 	}
 
 
-	init { arg s;
+	init { arg s, path;
 
 
 
@@ -39,12 +39,12 @@ SACKEngine {
 	}
 
 
-	addSynthDefs { arg libName;
+	addSynthDefs { arg path, libName;
 
 		var lib = libName ? synths.name;
 		var string, defs;
 
-		string = String.readNew(File(PathName(thisProcess.nowExecutingPath).pathOnly+/+"SackSynthdefs.scd", "r")).split($_); //read in synthdefs as strings
+		string = String.readNew(File(path, "r")).split($_); //read in synthdefs as strings
 
 		defs = string.collect({arg item, i;
 			var def = thisProcess.interpreter.interpret(item);
@@ -72,13 +72,7 @@ SACKEngine {
 		^synth
 	}
 
-	/*prepareSynth { arg dict;
-		var controls = this.synths.at(name.asSymbol).controls;
-		var e = ();
-		dict.do()
 
-
-	}*/
 
 	createControlBus { arg name, numChannels = 1;
 		var nm = Bus.control(server, numChannels);
@@ -102,6 +96,25 @@ SACKEngine {
 	}
 
 	listSynths {
-		^\sine;
+		var a = this.synths.synthDescs;
+		a.keys.postln;
+		^a.keys.asArray;
 	}
+
+	listControls { arg synth;
+		var a = this.synths.synthDescs.at(synth.asSymbol).controls;
+		a.postln;
+		^a
+	}
+
+	needsBuf { arg synth;
+		var a = this.listControls(synth.asSymbol);
+		a.do({ arg ctrl;
+			(ctrl.name == \buf).if({^true});});
+		^false
+	}
+
+
+
+
 }

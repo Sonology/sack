@@ -1,14 +1,42 @@
 //synth tests
 
+
+
+
 a = SACKEngine.new;
 a.addSynthDefs;
 
+a.synths
+
+j = a.listSynths
+h = a.needsBuf(\imp2)
+
+h
+
+
+or
+
+h
+
+
+h[1].cla
+ControlName
+
+j
+
 (
-i = Synth(\imp2, [\freq, a.createControlBus(\ctrl1).asMap, \filterFreq, a.createControlBus(\ctrl2).asMap]);
+i = Synth(\imp2, [
+	\freq, a.createControlBus(\ctrl1).asMap,
+	\filterFreq, a.createControlBus(\ctrl2).asMap
+]);
 
 j = Synth(\writeBusLag, [\bus, a.buses.ctrl1, \val, 1]);
 k = Synth(\writeBus, [\bus, a.buses.ctrl2, \val, 8000]);
 )
+
+
+
+a.buses
 
 
 //could put this ^ in the .play method so .play makes a synth with all the necessary controls //done as this.createControlBus(\name).asMap and also creates Synths for writing to the //busses by controllers/patterns
@@ -25,6 +53,9 @@ Pbindef(\l, \val, Pn(Pshuf([4,8,3,3,16,32],1),inf))
 Pbindef(\l, \val, Pwhite(10,500))
 
 
+
+
+a.createControlBus()
 
 j.set(\lag, 0.1)
 
@@ -50,3 +81,40 @@ Pmono(\writeBus, \dur, 0.3, \bus, b2.index, \val, Pwhite(100,8000,inf)).play;
 
 //this isn't working really
 )
+
+SynthDescLib
+
+
+NamedControl
+
+
+a.synths.synthDescs.do( _.postln)
+
+k = a.synths.synthDescs.at(\imp2).controls
+
+k[0].defaultValue
+
+
+
+
+o = PathName(thisProcess.nowExecutingPath).pathOnly+/+"SackSynthdefs.scd";
+
+a = SACKEngine.new;
+
+a.addSynthDefs(o);
+
+
+
+
+
+
+
+
+
+
+ControlName
+
+SynthDesc
+k.class
+
+k.keys

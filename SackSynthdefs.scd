@@ -34,6 +34,13 @@ SynthDef(\writeBusLag, {arg bus, val, lag = 0.4;
 	Out.kr(bus, Lag.kr(val, 0.4));
 });_
 
+SynthDef(\doesItNeedBuf, {arg bus, buf;
+	var sound = PlayBuf.ar(1, buf);
+	Out.ar(bus, sound);
+});_
+
+
+
 SynthDef(\imp, {arg freq = 10;
 	Out.ar(0, Impulse.ar(freq));
 });
