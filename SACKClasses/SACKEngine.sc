@@ -1,6 +1,6 @@
 SACKEngine {
 
-	var outBus, <synth, <>synths, <volume, <server, <bufs, <buses;
+	var outBus, <synth, <>synths, <volume, <server, <bufs, <buses, <fx;
 
 	*new { arg s;
 
@@ -35,23 +35,25 @@ SACKEngine {
 
 		bufs = IdentityDictionary.new(know: true);
 		buses = IdentityDictionary.new(know: true);
+		fx = IdentityDictionary.new(know: true);
 
 	}
 
 
-	addSynthDefs { arg libName;
+	addSynthDefs { arg path, libName;
 
 		var lib = libName ? synths.name;
 		var string, defs;
 
-		string = String.readNew(File(PathName(thisProcess.nowExecutingPath).pathOnly+/+"SackSynthdefs.scd", "r")).split($_); //read in synthdefs as strings
+		string = String.readNew(File(path, "r")).split($_); //read in synthdefs as strings
 
 		defs = string.collect({arg item, i;
 			var def = thisProcess.interpreter.interpret(item);
 			def;
 		});
 
-		defs.do( _.add(lib.asSymbol));
+		defs.do( _.store(lib.asSymbol));
+		SynthDescLib.(lib.asSymbol).read;
 		^this.synths;
 	}
 
@@ -72,13 +74,7 @@ SACKEngine {
 		^synth
 	}
 
-	/*prepareSynth { arg dict;
-		var controls = this.synths.at(name.asSymbol).controls;
-		var e = ();
-		dict.do()
 
-
-	}*/
 
 	createControlBus { arg name, numChannels = 1;
 		var nm = Bus.control(server, numChannels);
@@ -102,6 +98,45 @@ SACKEngine {
 	}
 
 	listSynths {
-		^\sine;
+		var a = this.synths.synthDescs;
+		a.keys.postln;
+		^a.keys.asArray;
 	}
+
+	listControls { arg synth;
+		var a = this.synths.synthDescs.at(synth.asSymbol).controls;
+		a.postln;
+		^a
+	}
+
+	needsBuf { arg synth;
+		var a = this.listControls(synth.asSymbol);
+		a.do({ arg ctrl;
+			(ctrl.name == \buf).if({^true});});
+		^false
+	}
+
+	/*applyEffect { arg name, in, out, group; 
+		
+		this.fx.name.asSymbol = ();
+		this.fx.name.in = in;
+		this.fx.name.out = out;
+
+		this.fx.name.synth = Synth.tail(group ? s, name.asSymbol);
+
+
+
+
+
+	}*/
+
+
+
+
+
+
+
+
+
+
 }
