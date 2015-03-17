@@ -1,6 +1,6 @@
 SACKEngine {
 
-	var outBus, <synth, <>synths, <volume, <server, <bufs, <buses;
+	var outBus, <synth, <>synths, <volume, <server, <bufs, <buses, <fx;
 
 	*new { arg s;
 
@@ -21,7 +21,7 @@ SACKEngine {
 	}
 
 
-	init { arg s, path;
+	init { arg s;
 
 
 
@@ -35,6 +35,7 @@ SACKEngine {
 
 		bufs = IdentityDictionary.new(know: true);
 		buses = IdentityDictionary.new(know: true);
+		fx = IdentityDictionary.new(know: true);
 
 	}
 
@@ -51,7 +52,8 @@ SACKEngine {
 			def;
 		});
 
-		defs.do( _.add(lib.asSymbol));
+		defs.do( _.store(lib.asSymbol));
+		SynthDescLib.(lib.asSymbol).read;
 		^this.synths;
 	}
 
@@ -113,6 +115,26 @@ SACKEngine {
 			(ctrl.name == \buf).if({^true});});
 		^false
 	}
+
+	/*applyEffect { arg name, in, out, group; 
+		
+		this.fx.name.asSymbol = ();
+		this.fx.name.in = in;
+		this.fx.name.out = out;
+
+		this.fx.name.synth = Synth.tail(group ? s, name.asSymbol);
+
+
+
+
+
+	}*/
+
+
+
+
+
+
 
 
 

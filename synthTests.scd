@@ -104,7 +104,7 @@ a = SACKEngine.new;
 a.addSynthDefs(o);
 
 
-
+a.listSynths.do({ arg ar; a.listControls(ar)})
 
 
 
