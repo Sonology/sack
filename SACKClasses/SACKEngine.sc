@@ -54,6 +54,9 @@ SACKEngine {
 
 		defs.do( _.store(lib.asSymbol));
 		SynthDescLib.(lib.asSymbol).read;
+
+
+
 		^this.synths;
 	}
 
@@ -116,27 +119,14 @@ SACKEngine {
 		^false
 	}
 
-	/*applyEffect { arg name, in, out, group; 
-		
-		this.fx.name.asSymbol = ();
-		this.fx.name.in = in;
-		this.fx.name.out = out;
+	addEffect { arg name, in, out, group;
+		var g = group ? server;
+		this.fx.put(name, Synth.tail(g, name, [\inBus, in, \outBus, out]));
+	}
 
-		this.fx.name.synth = Synth.tail(group ? s, name.asSymbol);
+	applyEffect { arg synth, effect;
 
+		Synth(\route, [\inBus, synth.get(\fxBus), \outBus, effect.get(\inBus)], effect, \addBefore);
 
-
-
-
-	}*/
-
-
-
-
-
-
-
-
-
-
+	}
 }

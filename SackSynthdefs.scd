@@ -65,7 +65,13 @@ SynthDef(\sps, { arg buf, rate = 1, out = 0, dur = 1, pan = 0, startPos = 0, amp
 
 
 SynthDef(\imp2, {arg freq = 10, filterFreq = 100, fxBus = 20, fxAmt = 0.5;
-	Out.ar(0, RHPF.ar(Impulse.ar(freq), filterFreq, 0.1)!2);
+
+	var signal = Pan2.ar(RHPF.ar(Impulse.ar(freq), filterFreq, 0.1));
+
+	Out.ar(fxBus, signal);
+	
+
+	Out.ar(0, signal);
 });_
 
 
@@ -89,7 +95,7 @@ SynthDef(\reverb, {|inBus=50, outBus=0, room=0.5, damp=0.5, amp=1, mix=1|
 
 
 
-SynthDef(\route, {|inBus=20, outBus=50, amt=0|
+SynthDef(\route, {|inBus=20, outBus=50, amt=1|
 	var signal;
 	signal=In.ar(inBus, 2);
 	Out.ar(outBus, signal*amt);

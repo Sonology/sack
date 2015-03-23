@@ -118,3 +118,25 @@ SynthDesc
 k.class
 
 k.keys
+
+
+
+a = SACKEngine.new;
+
+b = a.addSynthDefs("/home/a__a/PROJECTS/SACK/sack/SackSynthdefs.scd");
+
+a.listSynths;""
+
+
+f = Synth(\sine)
+
+
+a.addEffect(\reverb, 20, 0);
+
+
+a.fx.reverb.get()
+
+
+f = Synth(\imp2, [\fxBus, 4]);
+
+a.applyEffect(f, a.fx.reverb)
