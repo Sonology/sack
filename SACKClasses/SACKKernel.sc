@@ -1,7 +1,5 @@
 SACKKernel {
 
-
-
 	*start {
 		var engine, sequencer, controlProcessor;
 
@@ -13,20 +11,15 @@ SACKKernel {
 
 			synthsPath = PathName(thisProcess.nowExecutingPath).pathOnly+/+"SackSynthdefs.scd";
 
-
-			engine = SACKEngine.new(server);
-
-			server.sync;
-
+			engine = SACKEngine.new;
 			synths = engine.addSynthDefs(synthsPath);
 
+			engine = SACKEngine.new;
+			sequencer = SACKSequencer.new([\pp], engine, "SackPatterns.scd");
 
-
-
-
-			sequencer = SACKSequencer.new(synths, engine);
-			controlProcessor = SACKControlprocessor.new;
+			controlProcessor = SACKControlProcessor.new;
 			controlProcessor.createStartStop(sequencer);
+
 		}.play;
 	}
 }

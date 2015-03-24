@@ -1,43 +1,48 @@
 SACKSequencer {
 
-	var <>t, <>pbinds, <>audioEngine, <>stream, <>b12, <>vitamin_C, <>millions_of_dollars_in_bank_account;
+	var <>audioEngine, <>stream, <>run, <>pattern_array, <>synths;
 
-	*new {|synths, audioEngine|
-		^super.new.init(synths, audioEngine);
+	*new {|synths, audioEngine, patternsFilename, tempo|
+		^super.new.init(synths, audioEngine, patternsFilename);
 	}
 
-	init {|synths, audioEngine|
+	init {|synths, audioEngine, patternsFilename, tempo=60|
 		this.audioEngine = audioEngine;
-		this.pbinds = this.createpbind(synths);
-		this.stream = this.pbinds.asStream;
+		this.synths = synths;
+		this.pattern_array = SackInclude.load(patternsFilename).value; // evaluate code in patternsFilename;
+		this.pattern_array[0].postcs;
+		this.stream = this.pattern_array.choose.asStream;
 
-		this.t = Task({
+		this.run = Task({
 			"playing".postln;
 			inf.do({
-				1.wait;
-				this.audioEngine.play(this.nextEvent);
+				var newEvent = ();
+				newEvent.freq = this.nextEvent;
+				newEvent.instrument = synths[0];
+				this.audioEngine.play(newEvent);
+				(60.0/tempo).wait;
 			});
 		})
 	}
 
-	createpbind { arg synths = \sine;
-		^Pbind(\instrument, synths,
-			\freq, Pwhite(100, 200, inf), \delta, 1);
-	}
-
 	start {
-		this.t.start;
+		this.run.start;
 	}
 
 	stop {
-		this.t.stop;
+		this.run.stop;
 	}
 
 	nextEvent {
-		^this.stream.next(());
+		^this.stream.next();
 	}
 
-	storeArgs{
-		^[this.name, this.pbinds];
+	tempo {
+		^this.tempo;
+	}
+
+	tempo_ {
+		|tempo|
+		this.tempo = tempo;
 	}
 }
